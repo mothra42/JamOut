@@ -17,9 +17,20 @@ class TOEJAMLIKE_API UOverlappableInstancedStaticMesh : public UInstancedStaticM
 	protected:
 		virtual int32 AddInstance(const FTransform& InstanceTransform, bool bWorldSpace);
 
+		// returns false if adding a new map instance was unsuccessful
+		UFUNCTION(BlueprintCallable, Category = "Map Instance Creation")
+		void AddNewInstanceForPlayerMapGeneration(
+			UPrimitiveComponent* OverlappedComponent, 
+			AActor* OtherActor,
+			UPrimitiveComponent* OtherComp, 
+			int32 OtherBodyIndex, 
+			bool bFromSweep, 
+			const FHitResult& SweepResult
+		);
+
 	public:
 		UFUNCTION(BlueprintCallable, Category = "Box Collision")
-		const TArray<class UBoxComponent*> GetBoxCollisionComps() { return BoxCollisionComponents; }
+		const TArray<UBoxComponent*> GetBoxCollisionComps() { return BoxCollisionComponents; }
 
 		UFUNCTION(BlueprintCallable, Category = "Box Collision")
 		const TMap<UBoxComponent*, FVector> GetBoxCollisionTileLocationPairs() { return BoxCollisionTileLocationPairs; }
@@ -30,7 +41,9 @@ class TOEJAMLIKE_API UOverlappableInstancedStaticMesh : public UInstancedStaticM
 		UPROPERTY(EditDefaultsOnly, Category = "Box Collision Settings")
 		FVector CollisionBoxLocationOffset = FVector(0.f, 0.f, 230.f);
 		UPROPERTY(EditDefaultsOnly, Category = "Box Collision Settings")
-		bool bShowGeneratedBoxes = false;
+		bool bShowGeneratedCollisionBoxes = false;
+		UPROPERTY(EditDefaultsOnly, Category = "Map Instance Settings")
+		FVector PlayerMapLocationOffset = FVector(100000.0, 0, 0);
 	
 	private:
 		FTransform FindBoxCollisionTransformOffset(const FTransform& TileTransform);

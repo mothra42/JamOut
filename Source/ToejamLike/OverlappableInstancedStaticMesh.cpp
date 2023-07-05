@@ -22,15 +22,42 @@ int32 UOverlappableInstancedStaticMesh::AddInstance(const FTransform& InstanceTr
 		NewBoxCollision->SetBoxExtent(CollisionBoxExtents);
 
 
-		if (bShowGeneratedBoxes)
+		if (bShowGeneratedCollisionBoxes)
 		{
 			NewBoxCollision->SetHiddenInGame(false);
 		}
+
+		NewBoxCollision->OnComponentBeginOverlap.AddDynamic(this, &UOverlappableInstancedStaticMesh::AddNewInstanceForPlayerMapGeneration);
 
 		BoxCollisionComponents.Add(NewBoxCollision);
 		AddNewBoxCollisionTileLocationPair(NewBoxCollision, InstanceTransform.GetLocation());
 	}
 	return Super::AddInstance(InstanceTransform, bWorldSpace);
+}
+
+void UOverlappableInstancedStaticMesh::AddNewInstanceForPlayerMapGeneration(
+	UPrimitiveComponent* OverlappedComponent,
+	AActor* OtherActor,
+	UPrimitiveComponent* OtherComp,
+	int32 OtherBodyIndex,
+	bool bFromSweep,
+	const FHitResult& SweepResult)
+{
+	FTransform NewInstanceTransform{};
+	
+	UBoxComponent* Box = Cast<UBoxComponent>(OverlappedComponent);
+
+	if (Box != nullptr)
+	{
+		FVector* OverlappedInstanceLocation = BoxCollisionTileLocationPairs.Find(Box);
+		if (OverlappedInstanceLocation != nullptr)
+		{
+			NewInstanceTransform.SetLocation(*OverlappedInstanceLocation + PlayerMapLocationOffset);
+
+			//TODO I think these locations will be in world space, but if there are errors, this might be the bug.
+			Super::AddInstance(NewInstanceTransform, false);
+		}
+	}
 }
 
 FTransform UOverlappableInstancedStaticMesh::FindBoxCollisionTransformOffset(const FTransform& TileTransform)
