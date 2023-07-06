@@ -15,7 +15,7 @@ class TOEJAMLIKE_API UOverlappableInstancedStaticMesh : public UInstancedStaticM
 	GENERATED_BODY()
 	
 	protected:
-		virtual int32 AddInstance(const FTransform& InstanceTransform, bool bWorldSpace);
+		
 
 		// returns false if adding a new map instance was unsuccessful
 		UFUNCTION(BlueprintCallable, Category = "Map Instance Creation")
@@ -29,6 +29,8 @@ class TOEJAMLIKE_API UOverlappableInstancedStaticMesh : public UInstancedStaticM
 		);
 
 	public:
+		virtual int32 AddInstance(const FTransform& InstanceTransform, bool bWorldSpace);
+
 		UFUNCTION(BlueprintCallable, Category = "Box Collision")
 		const TArray<UBoxComponent*> GetBoxCollisionComps() { return BoxCollisionComponents; }
 

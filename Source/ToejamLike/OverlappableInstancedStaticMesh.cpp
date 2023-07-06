@@ -55,7 +55,7 @@ void UOverlappableInstancedStaticMesh::AddNewInstanceForPlayerMapGeneration(
 			NewInstanceTransform.SetLocation(*OverlappedInstanceLocation + PlayerMapLocationOffset);
 
 			//TODO I think these locations will be in world space, but if there are errors, this might be the bug.
-			Super::AddInstance(NewInstanceTransform, false);
+			Super::AddInstance(NewInstanceTransform, true);
 		}
 	}
 }
