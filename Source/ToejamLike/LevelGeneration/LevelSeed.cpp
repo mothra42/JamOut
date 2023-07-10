@@ -3,6 +3,7 @@
 
 #include "LevelSeed.h"
 #include "../OverlappableInstancedStaticMesh.h"
+#include "Kismet/KismetMathLibrary.h"
 
 // Sets default values
 ALevelSeed::ALevelSeed()
@@ -44,39 +45,55 @@ void ALevelSeed::GenerateLevel()
 	*/
 	int32 x = 0, y = 0;
 
-	//int32 Iteration = 1;
-
 	AddNewInstance(x, y);
 	for (int32 Iteration = 1; Iteration <= NumIterations; ++Iteration)
 	{
 		for (int32 i = 0; i < Iteration; ++i)
 		{
-			AddNewInstance(++x, y);
+			if (UKismetMathLibrary::RandomBoolWithWeight(ChanceOfInstanceCreation))
+			{
+				AddNewInstance(++x, y);
+			}
 		}
 
 		for (int32 i = 0; i < Iteration - 1; ++i)
 		{
-			AddNewInstance(x, ++y);
+			if (UKismetMathLibrary::RandomBoolWithWeight(ChanceOfInstanceCreation))
+			{
+				AddNewInstance(x, ++y);
+			}
 		}
 
 		for (int32 i = 0; i < Iteration; ++i)
 		{
-			AddNewInstance(--x, ++y);
+			if (UKismetMathLibrary::RandomBoolWithWeight(ChanceOfInstanceCreation))
+			{
+				AddNewInstance(--x, ++y);
+			}
 		}
 
 		for (int32 i = 0; i < Iteration; ++i)
 		{
-			AddNewInstance(--x, y);
+			if (UKismetMathLibrary::RandomBoolWithWeight(ChanceOfInstanceCreation))
+			{
+				AddNewInstance(--x, y);
+			}
 		}
 
 		for (int32 i = 0; i < Iteration; ++i)
 		{
-			AddNewInstance(x, --y);
+			if (UKismetMathLibrary::RandomBoolWithWeight(ChanceOfInstanceCreation))
+			{
+				AddNewInstance(x, --y);
+			}
 		}
 
 		for (int32 i = 0; i < Iteration; ++i)
 		{
-			AddNewInstance(++x, --y);
+			if (UKismetMathLibrary::RandomBoolWithWeight(ChanceOfInstanceCreation))
+			{
+				AddNewInstance(++x, --y);
+			}
 		}
 
 
@@ -86,25 +103,35 @@ void ALevelSeed::GenerateLevel()
 void ALevelSeed::AddNewInstance(int32 x, int32 y)
 {
 	FVector StartingLocation = Root->GetComponentLocation();
-	
-	//x -> x + y/2, y -> Sqrt(3)/2 * y
 
+	float XTransform = x;
+
+	float YTransform = y;
+
+	ApplyCoordinateTransform(XTransform, YTransform);
 	
 	FVector NewInstanceLocation = FVector(
-		(x * XDiameter) + StartingLocation.X,
-		(y * YDiameter) + StartingLocation.Y,
+		(XTransform * XDiameter) + StartingLocation.X,
+		YTransform * YDiameter * (FMath::Sqrt(3.f)/2) + StartingLocation.Y,
 		StartingLocation.Z
 	);
-
-	NewInstanceLocation.X = NewInstanceLocation.X + (NewInstanceLocation.Y / 2.f);
-
-	NewInstanceLocation.Y = (NewInstanceLocation.Y * (FMath::Sqrt(3.f) / 2.f));
-
+	
 	FTransform NewInstanceTransform{};
 
 	NewInstanceTransform.SetLocation(NewInstanceLocation);
 
 	InstancedMesh->AddInstance(NewInstanceTransform, true);
+}
+
+void ALevelSeed::ApplyCoordinateTransform(float& x, float& y)
+{
+	//x -> x + y/2, y -> Sqrt(3)/2 * y
+
+	//apply transform to go to skewed coordinates for hexagonal layout
+
+	x = x + (y / 2.f);
+
+	y = (FMath::Sqrt(3.f) / 2.f) * y;
 }
 
 

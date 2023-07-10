@@ -35,6 +35,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Instanced Mesh Settings")
 	class UOverlappableInstancedStaticMesh* InstancedMesh;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Instanced Mesh Settings")
+	float ChanceOfInstanceCreation = 0.95;
+
 	class USceneComponent* Root;
 
 public:	
@@ -43,5 +46,7 @@ private:
 	void GenerateLevel();
 
 	void AddNewInstance(int32 x, int32 y);
+
+	void ApplyCoordinateTransform(float& x, float& y);
 
 };
