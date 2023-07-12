@@ -54,5 +54,6 @@ class TOEJAMLIKE_API UOverlappableInstancedStaticMesh : public UInstancedStaticM
 
 		TArray<UBoxComponent*> BoxCollisionComponents;
 		TMap<UBoxComponent*, FVector> BoxCollisionTileLocationPairs;
+		TMap<UBoxComponent*, int32> BoxCollisionInstancePairs;
 
 };

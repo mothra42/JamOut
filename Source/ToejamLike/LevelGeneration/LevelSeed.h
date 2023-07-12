@@ -32,8 +32,8 @@ protected:
 
 	//This property must be set to a instanced mesh that lives in the world.
 	//If this is not set level generation will fail!
-	UPROPERTY(EditDefaultsOnly, Category = "Instanced Mesh Settings")
-	class UOverlappableInstancedStaticMesh* InstancedMesh;
+	UPROPERTY(EditAnywhere, Category = "Instanced Mesh Settings")
+	class ABaseTile* Tile;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Instanced Mesh Settings")
 	float ChanceOfInstanceCreation = 0.95;
@@ -43,7 +43,11 @@ protected:
 public:	
 
 private:
+	UFUNCTION(BlueprintCallable)
 	void GenerateLevel();
+
+	UFUNCTION(BlueprintCallable)
+	void ResetLevel();
 
 	void AddNewInstance(int32 x, int32 y);
 

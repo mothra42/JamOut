@@ -4,6 +4,7 @@
 #include "LevelSeed.h"
 #include "../OverlappableInstancedStaticMesh.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "BaseTile.h"
 
 // Sets default values
 ALevelSeed::ALevelSeed()
@@ -14,9 +15,9 @@ ALevelSeed::ALevelSeed()
 	Root = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
 	RootComponent = Root;
 
-	InstancedMesh = CreateDefaultSubobject<UOverlappableInstancedStaticMesh>(TEXT("InstancedMesh"));
+	//InstancedMesh = CreateDefaultSubobject<UOverlappableInstancedStaticMesh>(TEXT("InstancedMesh"));
 
-	InstancedMesh->SetupAttachment(Root);
+	//InstancedMesh->SetupAttachment(Root);
 }
 
 // Called when the game starts or when spawned
@@ -53,6 +54,7 @@ void ALevelSeed::GenerateLevel()
 			if (UKismetMathLibrary::RandomBoolWithWeight(ChanceOfInstanceCreation))
 			{
 				AddNewInstance(++x, y);
+				//AddNewInstance(x + 10000, y);
 			}
 		}
 
@@ -61,6 +63,7 @@ void ALevelSeed::GenerateLevel()
 			if (UKismetMathLibrary::RandomBoolWithWeight(ChanceOfInstanceCreation))
 			{
 				AddNewInstance(x, ++y);
+				//AddNewInstance(x + 10000, y);
 			}
 		}
 
@@ -69,6 +72,7 @@ void ALevelSeed::GenerateLevel()
 			if (UKismetMathLibrary::RandomBoolWithWeight(ChanceOfInstanceCreation))
 			{
 				AddNewInstance(--x, ++y);
+				//AddNewInstance(x + 10000, y);
 			}
 		}
 
@@ -77,6 +81,7 @@ void ALevelSeed::GenerateLevel()
 			if (UKismetMathLibrary::RandomBoolWithWeight(ChanceOfInstanceCreation))
 			{
 				AddNewInstance(--x, y);
+				//AddNewInstance(x + 10000, y);
 			}
 		}
 
@@ -85,6 +90,7 @@ void ALevelSeed::GenerateLevel()
 			if (UKismetMathLibrary::RandomBoolWithWeight(ChanceOfInstanceCreation))
 			{
 				AddNewInstance(x, --y);
+				//AddNewInstance(x + 10000, y);
 			}
 		}
 
@@ -93,10 +99,9 @@ void ALevelSeed::GenerateLevel()
 			if (UKismetMathLibrary::RandomBoolWithWeight(ChanceOfInstanceCreation))
 			{
 				AddNewInstance(++x, --y);
+				//AddNewInstance(x + 10000, y);
 			}
 		}
-
-
 	}
 }
 
@@ -118,9 +123,14 @@ void ALevelSeed::AddNewInstance(int32 x, int32 y)
 	
 	FTransform NewInstanceTransform{};
 
+	FTransform MapInstanceTransform{};
+
 	NewInstanceTransform.SetLocation(NewInstanceLocation);
 
-	InstancedMesh->AddInstance(NewInstanceTransform, true);
+	//MapInstanceTransform.SetLocation(NewInstanceLocation + FVector(-100000.0, 0, 0));
+
+	Tile->GetInstancedMesh()->AddInstance(NewInstanceTransform, true);
+	//Tile->GetInstancedMesh()->AddInstance(MapInstanceTransform, true);
 }
 
 void ALevelSeed::ApplyCoordinateTransform(float& x, float& y)
@@ -134,5 +144,9 @@ void ALevelSeed::ApplyCoordinateTransform(float& x, float& y)
 	y = (FMath::Sqrt(3.f) / 2.f) * y;
 }
 
+void ALevelSeed::ResetLevel()
+{
+	Tile->GetInstancedMesh()->ClearInstances();
+}
 
 
