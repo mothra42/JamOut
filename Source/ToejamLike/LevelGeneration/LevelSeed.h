@@ -33,7 +33,11 @@ protected:
 	//This property must be set to a instanced mesh that lives in the world.
 	//If this is not set level generation will fail!
 	UPROPERTY(EditAnywhere, Category = "Instanced Mesh Settings")
-	class ABaseTile* Tile;
+	class ABaseTile* GrassTile;
+	UPROPERTY(EditAnywhere, Category = "Instanced Mesh Settings")
+	ABaseTile* WaterTile;
+	UPROPERTY(EditAnywhere, Category = "Instanced Mesh Settings")
+	ABaseTile* SandTile;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Instanced Mesh Settings")
 	float ChanceOfInstanceCreation = 0.95;

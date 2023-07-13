@@ -116,7 +116,20 @@ void ALevelSeed::AddNewInstance(int32 x, int32 y)
 
 	NewInstanceTransform.SetLocation(NewInstanceLocation);
 
-	Tile->GetInstancedMesh()->AddInstance(NewInstanceTransform, true);
+	float TileDecider = FMath::FRandRange(0.f, 3.0);
+
+	if (TileDecider < 1.0)
+	{
+		GrassTile->GetInstancedMesh()->AddInstance(NewInstanceTransform, true);
+	}
+	else if (TileDecider > 1.0 && TileDecider < 2.0)
+	{
+		WaterTile->GetInstancedMesh()->AddInstance(NewInstanceTransform, true);
+	}
+	else
+	{
+		SandTile->GetInstancedMesh()->AddInstance(NewInstanceTransform, true);
+	}
 }
 
 void ALevelSeed::ApplyCoordinateTransform(float& x, float& y)
@@ -132,7 +145,9 @@ void ALevelSeed::ApplyCoordinateTransform(float& x, float& y)
 
 void ALevelSeed::ResetLevel()
 {
-	Tile->GetInstancedMesh()->ClearInstances();
+	GrassTile->GetInstancedMesh()->ClearInstances();
+	WaterTile->GetInstancedMesh()->ClearInstances();
+	SandTile->GetInstancedMesh()->ClearInstances();
 }
 
 
