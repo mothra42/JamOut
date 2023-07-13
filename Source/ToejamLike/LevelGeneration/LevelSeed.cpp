@@ -14,10 +14,6 @@ ALevelSeed::ALevelSeed()
 
 	Root = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
 	RootComponent = Root;
-
-	//InstancedMesh = CreateDefaultSubobject<UOverlappableInstancedStaticMesh>(TEXT("InstancedMesh"));
-
-	//InstancedMesh->SetupAttachment(Root);
 }
 
 // Called when the game starts or when spawned
@@ -26,7 +22,6 @@ void ALevelSeed::BeginPlay()
 	Super::BeginPlay();
 
 	GenerateLevel();
-
 }
 
 void ALevelSeed::GenerateLevel()
@@ -54,7 +49,6 @@ void ALevelSeed::GenerateLevel()
 			if (UKismetMathLibrary::RandomBoolWithWeight(ChanceOfInstanceCreation))
 			{
 				AddNewInstance(++x, y);
-				//AddNewInstance(x + 10000, y);
 			}
 		}
 
@@ -63,7 +57,6 @@ void ALevelSeed::GenerateLevel()
 			if (UKismetMathLibrary::RandomBoolWithWeight(ChanceOfInstanceCreation))
 			{
 				AddNewInstance(x, ++y);
-				//AddNewInstance(x + 10000, y);
 			}
 		}
 
@@ -72,7 +65,6 @@ void ALevelSeed::GenerateLevel()
 			if (UKismetMathLibrary::RandomBoolWithWeight(ChanceOfInstanceCreation))
 			{
 				AddNewInstance(--x, ++y);
-				//AddNewInstance(x + 10000, y);
 			}
 		}
 
@@ -81,7 +73,6 @@ void ALevelSeed::GenerateLevel()
 			if (UKismetMathLibrary::RandomBoolWithWeight(ChanceOfInstanceCreation))
 			{
 				AddNewInstance(--x, y);
-				//AddNewInstance(x + 10000, y);
 			}
 		}
 
@@ -90,7 +81,6 @@ void ALevelSeed::GenerateLevel()
 			if (UKismetMathLibrary::RandomBoolWithWeight(ChanceOfInstanceCreation))
 			{
 				AddNewInstance(x, --y);
-				//AddNewInstance(x + 10000, y);
 			}
 		}
 
@@ -99,7 +89,6 @@ void ALevelSeed::GenerateLevel()
 			if (UKismetMathLibrary::RandomBoolWithWeight(ChanceOfInstanceCreation))
 			{
 				AddNewInstance(++x, --y);
-				//AddNewInstance(x + 10000, y);
 			}
 		}
 	}
@@ -127,10 +116,7 @@ void ALevelSeed::AddNewInstance(int32 x, int32 y)
 
 	NewInstanceTransform.SetLocation(NewInstanceLocation);
 
-	//MapInstanceTransform.SetLocation(NewInstanceLocation + FVector(-100000.0, 0, 0));
-
 	Tile->GetInstancedMesh()->AddInstance(NewInstanceTransform, true);
-	//Tile->GetInstancedMesh()->AddInstance(MapInstanceTransform, true);
 }
 
 void ALevelSeed::ApplyCoordinateTransform(float& x, float& y)

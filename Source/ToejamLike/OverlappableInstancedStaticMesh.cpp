@@ -8,14 +8,8 @@
 
 int32 UOverlappableInstancedStaticMesh::AddInstance(const FTransform& InstanceTransform, bool bWorldSpace)
 {
-	//UE_LOG(LogTemp, Warning, TEXT("Calling custom function"));
-
-	//Tomorrow Adam, this code is no longer executing properly since I've changed the code
-	//to have a single instanced mesh in the world
-	//int32 NewInstanceIndex = 0;
 	if (GetOwner() != nullptr)
 	{
-		//UE_LOG(LogTemp, Warning, TEXT("Found my parent"));
 		FTransform BoxCollisionTransform = FindBoxCollisionTransformOffset(InstanceTransform);
 		UBoxComponent* NewBoxCollision = Cast<UBoxComponent>(GetOwner()->AddComponentByClass(
 			UBoxComponent::StaticClass(),
@@ -36,10 +30,6 @@ int32 UOverlappableInstancedStaticMesh::AddInstance(const FTransform& InstanceTr
 		
 		BoxCollisionComponents.Add(NewBoxCollision);
 		AddNewBoxCollisionTileLocationPair(NewBoxCollision, InstanceTransform.GetLocation());
-
-		//TEST for moving instances instead of generating new ones on the fly
-		//NewInstanceIndex = Super::AddInstance(InstanceTransform, bWorldSpace);
-		//BoxCollisionInstancePairs.Add(NewBoxCollision, NewInstanceIndex);
 	}
 
 	return Super::AddInstance(InstanceTransform, bWorldSpace);
@@ -60,16 +50,13 @@ void UOverlappableInstancedStaticMesh::AddNewInstanceForPlayerMapGeneration(
 	if (Box != nullptr)
 	{
 		FVector* OverlappedInstanceLocation = BoxCollisionTileLocationPairs.Find(Box);
-		//int32* InstanceToMove = BoxCollisionInstancePairs.Find(Box);
 		if (OverlappedInstanceLocation != nullptr)
 		{
-			//UE_LOG(LogTemp, Warning, TEXT("Updating Instance"));
 			NewInstanceTransform.SetLocation(*OverlappedInstanceLocation + PlayerMapLocationOffset);
-			//Super::UpdateInstanceTransform(*InstanceToMove + 1, NewInstanceTransform, true, true, true);
 
 
 			//TODO I think these locations will be in world space, but if there are errors, this might be the bug.
-			//Super::AddInstance(NewInstanceTransform, true);
+			Super::AddInstance(NewInstanceTransform, true);
 			UE_LOG(LogTemp, Warning, TEXT("Adding New Instance at %s"), *NewInstanceTransform.GetLocation().ToString());
 		}
 	}
