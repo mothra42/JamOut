@@ -26,7 +26,7 @@ int32 UOverlappableInstancedStaticMesh::AddInstance(const FTransform& InstanceTr
 			NewBoxCollision->SetHiddenInGame(false);
 		}
 		
-		NewBoxCollision->OnComponentBeginOverlap.AddDynamic(this, &UOverlappableInstancedStaticMesh::AddNewInstanceForPlayerMapGeneration);
+		//NewBoxCollision->OnComponentBeginOverlap.AddDynamic(this, &UOverlappableInstancedStaticMesh::AddNewInstanceForPlayerMapGeneration);
 		
 		BoxCollisionComponents.Add(NewBoxCollision);
 		AddNewBoxCollisionTileLocationPair(NewBoxCollision, InstanceTransform.GetLocation());
