@@ -62,6 +62,8 @@ private:
 	UFUNCTION(BlueprintCallable)
 	void ResetLevel();
 
+	void ChooseTeleporterOrTile(int32 x, int32 y);
+
 	void AddNewInstance(int32 x, int32 y);
 
 	void AddTeleportTile(int32 x, int32 y);

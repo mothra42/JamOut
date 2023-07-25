@@ -49,7 +49,7 @@ void ALevelSeed::GenerateLevel()
 		{
 			if (UKismetMathLibrary::RandomBoolWithWeight(ChanceOfInstanceCreation))
 			{
-				AddNewInstance(++x, y);
+				ChooseTeleporterOrTile(++x, y);
 			}
 		}
 
@@ -57,7 +57,7 @@ void ALevelSeed::GenerateLevel()
 		{
 			if (UKismetMathLibrary::RandomBoolWithWeight(ChanceOfInstanceCreation))
 			{
-				AddNewInstance(x, ++y);
+				ChooseTeleporterOrTile(x, ++y);
 			}
 		}
 
@@ -65,15 +65,7 @@ void ALevelSeed::GenerateLevel()
 		{
 			if (UKismetMathLibrary::RandomBoolWithWeight(ChanceOfInstanceCreation))
 			{
-				if (UKismetMathLibrary::RandomBoolWithWeight(0.08) && !bHasTeleporterBeenSpawned)
-				{
-					AddTeleportTile(--x, ++y);
-					bHasTeleporterBeenSpawned = true;
-				}
-				else
-				{
-					AddNewInstance(--x, ++y);
-				}
+				ChooseTeleporterOrTile(--x, ++y);
 			}
 		}
 
@@ -81,7 +73,7 @@ void ALevelSeed::GenerateLevel()
 		{
 			if (UKismetMathLibrary::RandomBoolWithWeight(ChanceOfInstanceCreation))
 			{
-				AddNewInstance(--x, y);
+				ChooseTeleporterOrTile(--x, y);
 			}
 		}
 
@@ -89,7 +81,7 @@ void ALevelSeed::GenerateLevel()
 		{
 			if (UKismetMathLibrary::RandomBoolWithWeight(ChanceOfInstanceCreation))
 			{
-				AddNewInstance(x, --y);
+				ChooseTeleporterOrTile(x, --y);
 			}
 		}
 
@@ -97,9 +89,22 @@ void ALevelSeed::GenerateLevel()
 		{
 			if (UKismetMathLibrary::RandomBoolWithWeight(ChanceOfInstanceCreation))
 			{
-				AddNewInstance(++x, --y);
+				ChooseTeleporterOrTile(++x, --y);
 			}
 		}
+	}
+}
+
+void ALevelSeed::ChooseTeleporterOrTile(int32 x, int32 y)
+{
+	if (UKismetMathLibrary::RandomBoolWithWeight(0.05) && !bHasTeleporterBeenSpawned)
+	{
+		AddTeleportTile(x, y);
+		bHasTeleporterBeenSpawned = true;
+	}
+	else
+	{
+		AddNewInstance(x, y);
 	}
 }
 
