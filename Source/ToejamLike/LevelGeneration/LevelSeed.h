@@ -44,16 +44,27 @@ protected:
 
 	class USceneComponent* Root;
 
+	bool bHasTeleporterBeenSpawned = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Level Settings")
+	FText LevelName;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Level Settings")
+	AActor* TeleportTile;
+
 public:	
 
 private:
 	UFUNCTION(BlueprintCallable)
 	void GenerateLevel();
 
+	//DEBUG ONLY
 	UFUNCTION(BlueprintCallable)
 	void ResetLevel();
 
 	void AddNewInstance(int32 x, int32 y);
+
+	void AddTeleportTile(int32 x, int32 y);
 
 	void ApplyCoordinateTransform(float& x, float& y);
 

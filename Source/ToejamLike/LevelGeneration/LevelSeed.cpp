@@ -4,6 +4,7 @@
 #include "LevelSeed.h"
 #include "../OverlappableInstancedStaticMesh.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "TeleportTile.h"
 #include "BaseTile.h"
 
 // Sets default values
@@ -64,7 +65,15 @@ void ALevelSeed::GenerateLevel()
 		{
 			if (UKismetMathLibrary::RandomBoolWithWeight(ChanceOfInstanceCreation))
 			{
-				AddNewInstance(--x, ++y);
+				if (UKismetMathLibrary::RandomBoolWithWeight(0.08) && !bHasTeleporterBeenSpawned)
+				{
+					AddTeleportTile(--x, ++y);
+					bHasTeleporterBeenSpawned = true;
+				}
+				else
+				{
+					AddNewInstance(--x, ++y);
+				}
 			}
 		}
 
@@ -148,6 +157,29 @@ void ALevelSeed::ResetLevel()
 	GrassTile->GetInstancedMesh()->ClearInstances();
 	WaterTile->GetInstancedMesh()->ClearInstances();
 	SandTile->GetInstancedMesh()->ClearInstances();
+}
+
+void ALevelSeed::AddTeleportTile(int32 x, int32 y)
+{
+	FVector StartingLocation = Root->GetComponentLocation();
+
+	float XTransform = x;
+
+	float YTransform = y;
+
+	ApplyCoordinateTransform(XTransform, YTransform);
+
+	FVector TeleportTileLocation = FVector(
+		(XTransform * XDiameter) + StartingLocation.X,
+		YTransform * YDiameter * (FMath::Sqrt(3.f) / 2) + StartingLocation.Y,
+		StartingLocation.Z
+	);
+
+	FTransform NewTeleportTileTransform{};
+
+	NewTeleportTileTransform.SetLocation(TeleportTileLocation);
+	
+	TeleportTile->SetActorLocation(TeleportTileLocation);
 }
 
 
